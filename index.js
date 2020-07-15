@@ -1,30 +1,32 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const postRoute = require('./routes/posts')
+const authRoute = require('./routes/auth')
+const mongoose = require('mongoose');
 
 const app = express();
 
 app.use(bodyParser.json());
 
-app.post("/login/", (req, res) => {
-    console.log(req.body);
-    res.send(`
-    Name - ${req.body.name},
-    LastNme - ${req.body.lastname}
-    `)
-})
+app.use('/posts', postRoute);
+app.use('/auth', authRoute);
 
 
-app.get("/posts/:id", (req, res) => {
-    const r = req.params.id
-    res.send(`<h1>PostId ${r}</h1>`)
-})
+mongoose.connect('mongodb+srv://tumo:tumo1234@cluster0.thjn7.mongodb.net/tumo?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}, () => {console.log('connected to db');});
 
-app.get("/home", (req, res) => {
-    const r = req.params.home
-    res.send(`<h1>Home</h1>`)
 
-})
 
-app.listen(3333, () => {
-    console.log('Node is running')
-})
+
+const PORT = 3333;
+app.listen(PORT, () =>{console.log(`Node is running on port ${PORT}`);})
+
+
+
+
+
+
+
+
