@@ -11,7 +11,6 @@ router.post('/signup', async(req, res)=>{
         }
         const user = new User(req.body);
         const data = await user.save();
-        // console.log(data);
         res.send(data);
     } catch (error) {
         res.status(400).send({error: 'Something went wrong'})
