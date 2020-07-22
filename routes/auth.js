@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../model/user');
+const jwt = require('jsonwebtoken');
+const check = require('./checkToken');
 
 router.post('/signup', async(req, res)=>{
     try {
@@ -29,16 +31,22 @@ router.post('/signin', async(req, res)=>{
             res.status(400).send({error: 'Type right password'})
             return;
         }
-        res.send({message: 'login succeed'});
+        const token = jwt.sign({id: userExists._id}, 'tumo_students');
+        res.send({auth_token: token});
     } catch (error) {
         res.status(400).send({error: 'Something went wrong'})
     }
 })
 
 
-router.get('/profile', (req, res)=>{
-    console.log('profile');
-    // profile
+router.get('/profile', check, async(req, res)=>{
+    try {
+        const data = await User.findById(req.user);
+        res.send(data);
+    } catch (error) {
+        console.log(`error ${error}`);
+        res.status(400).send('Something went wrong');
+    }
 })
 
 
