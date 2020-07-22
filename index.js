@@ -19,7 +19,7 @@ mongoose.connect('mongodb+srv://tumo:tumo1234@cluster0.thjn7.mongodb.net/tumo?re
 
 
 const port = process.env.PORT || 3333;
-app.listen(PORT, () =>{console.log(`Node is running on port ${port}`);})
+app.listen(port, () =>{console.log(`Node is running on port ${port}`);})
 
 
 
