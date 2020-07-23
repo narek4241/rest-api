@@ -17,14 +17,14 @@ router.post('/signup', async (req, res) => {
         const data = await user.save();
 
         // send mail
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-        const msg = {
-            to: req.body.email,
-            from: 'narek.ghazaryan.g@tumo.org',
-            subject: `Welcome Dear ${req.body.firstname ? req.body.firstname : 'User'}.`,
-            html: `Thank You for your registration. &nbsp; Enjoy Scelet!`,
-        };
-        await sgMail.send(msg);
+        // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        // const msg = {
+        //     to: req.body.email,
+        //     from: 'narek.ghazaryan.g@tumo.org',
+        //     subject: `Welcome Dear ${req.body.firstname ? req.body.firstname : 'User'}.`,
+        //     html: `Thank You for your registration. &nbsp; Enjoy Scelet!`,
+        // };
+        // sgMail.send(msg);
 
         res.send(data);
     } catch (error) {
@@ -56,9 +56,12 @@ router.post('/signin', async (req, res) => {
 router.get('/profile', check, async (req, res) => {
     try {
         const data = await User.findById(req.user);
+
+        const token = jwt.sign({password: data.password}, 'tumo_students');
+        data.password = token;
+
         res.send(data);
     } catch (error) {
-        console.log(`error ${error}`);
         res.status(400).send('Something went wrong');
     }
 })

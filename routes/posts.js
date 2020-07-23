@@ -37,10 +37,10 @@ router.post('/add', check, async(req,res)=>{
     }
 })
 
-router.get('/user/:userId',check, async(req, res)=>{
+router.get('/user/:userId', async(req, res)=>{
     const userId = req.params.userId;
     try {
-        const data = await Post.find({userId: userId}).populate('userId', 'firstname lastname email avatar coverImgUrl _id');
+        const data = await Post.find({userId: userId}).populate('userId', 'firstname lastname email contact date _id');
         res.send(data);
     } catch (error) {
         res.status(400).send('Something went wrong');
@@ -49,7 +49,7 @@ router.get('/user/:userId',check, async(req, res)=>{
 
 router.get('/profile', check, async(req, res)=>{
     try {
-        const data = await Post.find({userId: req.user}).populate('userId', 'firstname lastname email avatar coverImgUrl _id');
+        const data = await Post.find({userId: req.user}).populate('userId', 'firstname lastname email contact _id');
         res.send(data);
     } catch (error) {
         res.status(400).send('Something went wrong');
@@ -69,6 +69,7 @@ router.get('/update/:id',check, async(req, res) => {
     try {
         const post = await Post.findByIdAndUpdate({_id: req.params.id},{"title": req.body.title}).populate('userId', 'firstname lastname email avatar coverImgUrl _id');
         const data = await post.save();
+        // #lb update DOES, but res sends from 2nd click, in spite of await
         res.send(data);
     } catch (error) {
         console.log(error);
