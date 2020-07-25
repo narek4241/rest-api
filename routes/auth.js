@@ -17,14 +17,18 @@ router.post('/signup', async (req, res) => {
         const data = await user.save();
 
         // send mail
-        // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-        // const msg = {
-        //     to: req.body.email,
-        //     from: 'narek.ghazaryan.g@tumo.org',
-        //     subject: `Welcome Dear ${req.body.firstname ? req.body.firstname : 'User'}.`,
-        //     html: `Thank You for your registration. &nbsp; Enjoy Scelet!`,
-        // };
-        // sgMail.send(msg);
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        const msg = {
+            to: req.body.email,
+            from: 'narek.ghazaryan.g@tumo.org',
+            subject: `Welcome Dear ${req.body.firstname ? req.body.firstname : 'User'}.`,
+            html: `Thank You for your registration. &nbsp; Enjoy Scelet!`,
+        };
+        sgMail.send(msg);
+
+        // hash
+        const token = jwt.sign({password: data.password}, 'tumo_students');
+        data.password = token;
 
         res.send(data);
     } catch (error) {
@@ -66,6 +70,37 @@ router.get('/profile', check, async (req, res) => {
     }
 })
 
+router.get('/profile/del/:id', check, async (req, res) => {
+    try {
+        const data = await User.findById(req.user);
+
+        if(req.params.id != data._id){
+            res.status(400).send('Access Denied');
+            return
+        }
+
+        const token = jwt.sign({password: data.password}, 'tumo_students');
+        data.password = token;
+
+        req.params.id === data._id;
+
+        await User.remove({_id: req.params.id});
+
+        res.send(`The Account has been deleted.`);
+    } catch (error) {
+        console.log(error);
+        res.status(400).send('Something went wrong');
+    }
+})
+
+router.get('/users', async (req, res) => {
+    try {
+        const data = await User.find();
+        res.send(data);
+    } catch (error) {
+        res.status(400).send({error: 'Something went wrong'});
+    }
+})
 
 module.exports = router;
 

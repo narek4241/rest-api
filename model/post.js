@@ -1,7 +1,32 @@
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-    title: {
+    // select
+    cat: {
+        type: String,
+        maxlength: 255,
+        minlength: 2,
+        required: false,
+    },
+
+    // select
+    region: {
+        type: String,
+        maxlength: 255,
+        minlength: 2,
+        required: false,
+    },
+
+    // radio
+    type: {
+        type: String,
+        maxlength: 255,
+        minlength: 2,
+        required: false,
+    },
+
+    // radio
+    state: {
         type: String,
         maxlength: 255,
         minlength: 2,
@@ -14,6 +39,7 @@ const postSchema = new mongoose.Schema({
         minlength: 2,
         required: false,
     },
+    // select
     currency: {
         type: String,
         maxlength: 255,
@@ -21,13 +47,21 @@ const postSchema = new mongoose.Schema({
         required: false,
     },
 
-    region: {
+    title: {
         type: String,
         maxlength: 255,
+        minlength: 2,
+        required: true,
+    },
+
+    desc: {
+        type: String,
+        maxlength: 5000,
         minlength: 2,
         required: false,
     },
 
+    //  link (add upload later)
     imgUrl: {
         type: String,
         maxlength: 1500,
@@ -59,28 +93,15 @@ const postSchema = new mongoose.Schema({
         required: false,
     },
 
-    state: {
-        type: String,
-        maxlength: 255,
-        minlength: 2,
-        required: true,
-    },
-
-    desc: {
-        type: String,
-        maxlength: 5000,
-        minlength: 2,
-        required: false,
-    },
-
-    country: {
-        type: String,
-        maxlength: 255,
-        minlength: 2,
-        required: false,
-    },
-
     role: {
+        type: String,
+        maxlength: 255,
+        minlength: 2,
+        required: false,
+    },
+
+    // select
+    country: {
         type: String,
         maxlength: 255,
         minlength: 2,
