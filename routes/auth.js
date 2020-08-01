@@ -8,8 +8,8 @@ const sgMail = require('@sendgrid/mail');
 
 router.post('/signup', async (req, res) => {
     try {
-        const existUser = await User.findOne({ email: req.body.email });
-        if (existUser) {
+        const currentUser = await User.findOne({ email: req.body.email });
+        if (currentUser) {
             res.status(400).send({ error: 'This email already exists' })
             return;
         }
@@ -17,14 +17,14 @@ router.post('/signup', async (req, res) => {
         const data = await user.save();
 
         // send mail
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-        const msg = {
-            to: req.body.email,
-            from: 'narek.ghazaryan.g@tumo.org',
-            subject: `Welcome Dear ${req.body.firstname ? req.body.firstname : 'User'}.`,
-            html: `Thank You for your registration. &nbsp; Enjoy Scelet!`,
-        };
-        sgMail.send(msg);
+        // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        // const msg = {
+        //     to: req.body.email,
+        //     from: 'narek.ghazaryan.g@tumo.org',
+        //     subject: `Welcome Dear ${req.body.firstname ? req.body.firstname : 'User'}.`,
+        //     html: `Thank You for your registration. &nbsp; Enjoy Scelet!`,
+        // };
+        // sgMail.send(msg);
 
         // hash
         const token = jwt.sign({password: data.password}, 'tumo_students');
@@ -39,18 +39,22 @@ router.post('/signup', async (req, res) => {
 
 router.post('/signin', async (req, res) => {
     try {
-        const userExists = await User.findOne({ email: req.body.email });
-        if (!userExists) {
+        const currentUser = await User.findOne({ email: req.body.email });
+        if (!currentUser) {
             res.status(400).send({ error: 'This email does not exist' })
             return;
         }
-        // userExists is object
-        if (req.body.password !== userExists.password) {
+        // currentUser is object
+        if (req.body.password !== currentUser.password) {
             res.status(400).send({ error: 'Type right password' })
             return;
         }
-        const token = jwt.sign({ id: userExists._id }, 'tumo_students');
+        // COMMENT jwt.sign('id: currentUser._id', pssw...) -->> marked piece -> SOLUTION of bug(long)
+        const token = jwt.sign({id: currentUser._id, password: currentUser.password}, 'tumo_students');
+
+        currentUser.password = token
         res.send({ auth_token: token });
+        
     } catch (error) {
         res.status(400).send({ error: 'Something went wrong' })
     }
@@ -59,13 +63,14 @@ router.post('/signin', async (req, res) => {
 
 router.get('/profile', check, async (req, res) => {
     try {
-        const data = await User.findById(req.user);
+        const currentUser = await User.findById(req.user);
 
-        const token = jwt.sign({password: data.password}, 'tumo_students');
-        data.password = token;
+        const token = jwt.sign({id: currentUser._id, password: currentUser.password}, 'tumo_students');
+        currentUser.password = token;
 
-        res.send(data);
+        res.send(currentUser);
     } catch (error) {
+        console.log(error);
         res.status(400).send('Something went wrong');
     }
 })
@@ -79,7 +84,7 @@ router.get('/profile/del/:id', check, async (req, res) => {
             return
         }
 
-        const token = jwt.sign({password: data.password}, 'tumo_students');
+        const token = jwt.sign({id: currentUser._id, password: data.password}, 'tumo_students');
         data.password = token;
 
         req.params.id === data._id;

@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema({
     cat: {
         type: String,
         maxlength: 255,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
 
@@ -13,7 +13,7 @@ const postSchema = new mongoose.Schema({
     region: {
         type: String,
         maxlength: 255,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
 
@@ -21,7 +21,7 @@ const postSchema = new mongoose.Schema({
     type: {
         type: String,
         maxlength: 255,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
 
@@ -29,35 +29,35 @@ const postSchema = new mongoose.Schema({
     state: {
         type: String,
         maxlength: 255,
-        minlength: 2,
-        required: true,
+        // minlength: 2,
+        required: false,
     },
 
     price: {
         type: String,
         maxlength: 255,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
     // select
     currency: {
         type: String,
         maxlength: 255,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
 
     title: {
         type: String,
         maxlength: 255,
-        minlength: 2,
+        // minlength: 2,
         required: true,
     },
 
     desc: {
         type: String,
         maxlength: 5000,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
 
@@ -65,46 +65,52 @@ const postSchema = new mongoose.Schema({
     imgUrl: {
         type: String,
         maxlength: 1500,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
     imgUrl2: {
         type: String,
         maxlength: 1500,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
     imgUrl3: {
         type: String,
         maxlength: 1500,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
     imgUrl4: {
         type: String,
         maxlength: 1500,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
     imgUrl5: {
         type: String,
         maxlength: 1500,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
 
     role: {
         type: String,
         maxlength: 255,
-        minlength: 2,
+        // minlength: 2,
         required: false,
+    },
+    contact: {
+        type: String,
+        maxlength: 255,
+        // minlength: 2,
+        required: true,
     },
 
     // select
     country: {
         type: String,
         maxlength: 255,
-        minlength: 2,
+        // minlength: 2,
         required: false,
     },
 

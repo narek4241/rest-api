@@ -17,15 +17,21 @@ router.get('/', async(req, res)=>{
 router.get('/post/:id', async(req, res)=>{
     const id = req.params.id;
     try {
-        const data = await Post.findById(id);
+        const data = await Post.findById(id).populate('userId', 'firstname lastname email contact date avatar info _id');
         res.send(data);
+        console.log(`dataBACKEND ${data}`);
     } catch (error) {
         res.status(400).send({error: 'Something went wrong'});
     }
 })
 
-router.post('/add', check, async(req,res)=>{
+router.post('/add', check,  async(req,res)=>{
     const profileData = {...req.body};
+    console.log(`req.body.title ${req.body.title}`);
+    console.log(`req.body._id ${req.body.id}`);
+
+    // console.clear();
+    // console.log(req.body);
     profileData.userId = req.user;
     try {
         const post = new Post(profileData);
@@ -50,6 +56,7 @@ router.get('/user/:userId', async(req, res)=>{
 router.get('/profile', check, async(req, res)=>{
     try {
         const data = await Post.find({userId: req.user}).populate('userId', 'firstname lastname email contact date avatar info _id');
+        res.send(data);
     } catch (error) {
         res.status(400).send('Something went wrong');
     }
@@ -72,6 +79,15 @@ router.get('/update/:id',check, async(req, res) => {
         res.send(data);
     } catch (error) {
         console.log(error);
+        res.status(400).send('Something went wrong');
+    }
+})
+
+router.get('/cat/:cat', async(req, res)=>{
+    try {
+        const data = await Post.find({cat: req.params.cat}).populate('userId', 'firstname lastname email contact date avatar info _id');
+        res.send(data);
+    } catch (error) {
         res.status(400).send('Something went wrong');
     }
 })
