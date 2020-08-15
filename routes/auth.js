@@ -107,6 +107,16 @@ router.get('/users', async (req, res) => {
     }
 })
 
+router.get('/profile/user/:id', async (req, res) => {
+    try {
+        const currentUser = await User.findById(req.params.id);
+        res.send(currentUser);
+    } catch (error) {
+        console.log(error);
+        res.status(400).send('Something went wrong');
+    }
+})
+
 module.exports = router;
 
 
