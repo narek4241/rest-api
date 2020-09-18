@@ -1,2 +1,2 @@
-# rest-api
-Tumo MW / BackEnd with Seda Hayrapetyan / Jul 2020
+# skelet-rest-api
+TMW/BackEnd/Jul2020
